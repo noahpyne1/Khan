@@ -1,1 +1,137 @@
-window.exp=window.exp||{Overwrite:{enabled:!0,automate:!1,delay:0.3},showAnswer:!1,videoSpoof:!0,stopTimer:!0,rgb:!1};class Tools{static log(e,t,o){console.log(`%c${e}:`,`color: ${t}; font-weight: bold;`,o)}static dupCont(){const e=document.querySelector("._13hsycvc");return e&&"true"!==e.dataset.dup?(e.innerHTML+=e.innerHTML,e.dataset.dup="true",e):null}static setTitle(e,t="Platform Destroyer"){const o=e.querySelector("._pcmek8q");o&&(o.textContent=t)}static setFooter(e,t){const o=e.querySelector("._1ee8w3sd");o&&(o.textContent=t)}static save(){localStorage.setItem("platformDestroyerSettings",JSON.stringify(window.exp))}static toggle(e){const t=e.split(".");let o=window;for(let e=0;e<t.length-1;e++)if(o=o?.[t[e]],!o)return;const n=t.at(-1);if("boolean"!=typeof o[n])return;const r=o[n];o[n]=!r,this.save(),this.update(),"exp.Overwrite.automate"!==e&&"exp.rgb"!==e&&(r||setTimeout(this.reload,150))}static update(){["exp.Overwrite.enabled","exp.Overwrite.automate","exp.showAnswer","exp.videoSpoof","exp.stopTimer","exp.rgb"].forEach((e=>{const t=e.replace(/\./g,"-")+"-btn",o=document.getElementById(t);if(!o)return;let n=window;for(const t of e.split("."))n=n?.[t];const r=n?"rgb(144, 238, 144)":"rgb(255, 182, 193)",a=o.querySelector("a");a&&(a.style.backgroundColor=r)}))}static reload(){const e=document.documentElement.outerHTML;console.clear(),document.open(),document.write(`<!DOCTYPE html><html lang="en">${e}</html>\n        <script>\n          (function(){\n            const iv = setInterval(() => {\n              if (window.JSON?.parse?._hooked) {\n                clearInterval(iv);\n                if (typeof init === 'function') init();\n              }\n            }, 200);\n          })();\n        <\/script>`),document.close(),window._menuReady=!1}}try{const e=localStorage.getItem("platformDestroyerSettings");if(e){const t=JSON.parse(e);t&&"object"==typeof t&&(window.exp={...window.exp,...t})}}catch{console.warn("Failed to load saved settings")}if(!JSON.parse._hooked){const e=JSON.parse;JSON.parse=function(t){const o=e(t),n=o?.data;if(n?.user?.contentItemProgresses&&(window._menuReady=!0,setTimeout((()=>{"function"==typeof init&&init()}),100)),n?.assessmentItem?.item?.itemData&&n.assessmentItem.item.itemData.includes("☃")){Tools.log("Lesson Data","purple",n.assessmentItem.item.itemData);const t=e(n.assessmentItem.item.itemData);if(exp.Overwrite.enabled){let prompt=location.hostname.startsWith("pt")?"Selecione uma opção":"Select an option";let widgetType="radio";const isMulti=t.question?.widgets?.["radio 1"]?.options?.multipleSelect||t.question?.content.includes("[[☃ checkbox");if(isMulti){widgetType="checkbox",prompt=location.hostname.startsWith("pt")?"Selecione todas as opções corretas":"Select all correct options"}t.question.content=prompt+"\n\n[[☃ choice 1]]",t.question.widgets={"choice 1":{type:widgetType,options:{choices:[{content:location.hostname.startsWith("pt")?"Correcto":"Correct",correct:!0},{content:location.hostname.startsWith("pt")?"Incorrecto":"Incorrect",correct:!1}],randomize:!1},version:{major:1,minor:0}}}}if(exp.showAnswer){const e=t.hints?.at(-1)?.content??"No hint available.";t.question.content+="\n\n[[☃ explanation 1]]",t.question.widgets["explanation 1"]={type:"explanation",options:{explanation:e,hidePrompt:"x",showPrompt:"Answer"},version:{major:0,minor:0}}}n.assessmentItem.item.itemData=JSON.stringify(t)}return o}}window._origFetch||(window._origFetch=window.fetch,window.fetch=async(e,t={})=>{let o=e instanceof Request?await e.clone().text():t.body;if(exp.videoSpoof&&o?.includes('"operationName":"updateUserVideoProgress"'))try{const n=JSON.parse(o),r=n?.variables?.input?.durationSeconds;r&&(n.variables.input.secondsWatched=r,n.variables.input.lastSecondWatched=r,t.body=JSON.stringify(n),e instanceof Request&&(e=new Request(e,{body:t.body})))}catch{}return exp.stopTimer&&"object"==typeof e&&e.url?.includes("mark_conversions")&&o?.includes("termination_event")?new Promise((()=>{})):window._origFetch.call(this,e,t)});const sels=['[data-testid="choice-icon__library-choice-icon"]','[data-testid="exercise-check-answer"]','[data-testid="exercise-next-question"]',"._1udzurba","._awve9b","._hxicrxf","._ypgawqo"];function getMenu(){const e=document.querySelector("._13hsycvc[data-dup='true']")||Tools.dupCont();return e&&(Tools.setTitle(e,"🧠 Platform Destroyer"),Tools.setFooter(e,"© 2025 ilyTobias")),e}function btn(e,t,o=!1,n=!1){const r=o?"rgb(144,238,144)":"rgb(255,182,193)",a=n?"12px":"16px",s=n?"4px 8px":"8px 12px",i=`<li id="${t}-btn" style="margin-bottom:6px; list-style:none;">\n    <a href="javascript:void(0)" class="_pkhvgz8" data-path="${t.replace(/-/g,".")}" style="display:flex; align-items:center; background-color:${r}; font-size:${a}; padding:${s}; cursor:pointer; user-select:none; text-decoration:none; color:#21242c;">\n      <span>${e}</span>\n    </a>\n  </li>`,c=document.querySelector('[data-testid="learnable-content-cells"]');c&&c.insertAdjacentHTML("beforeend",i)}function delayInput(e){const t=document.querySelector('[data-testid="learnable-content-cells"]');if(!t)return;document.getElementById("auto-delay")?.remove();const o=document.createElement("li");o.id="auto-delay",o.style.cssText="margin-bottom:6px; list-style:none; background:#fff; border-radius:4px; padding:6px 12px; display:flex; align-items:center; gap:8px; box-shadow:0 1px 3px rgb(0 0 0 / 0.1);",o.innerHTML=`<label for="delayInput" style="font-size:14px; color:#21242c; user-select:none; flex-grow:1; cursor:pointer;">Delay (s):</label>\n    <input id="delayInput" type="number" min="0.3" step="0.1" value="${e}" placeholder="Delay (s)" style="width:70px; padding:4px 8px; font-size:14px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;" />`;const n=document.getElementById("exp-Overwrite-automate-btn");n?n.insertAdjacentElement("afterend",o):t.appendChild(o),o.querySelector("input").addEventListener("input",(e=>{const t=parseFloat(e.target.value);t>=0.3&&(exp.Overwrite.delay=t,Tools.save())}))}function addRgbCss(){if(document.getElementById("rgb-style"))return;const e=document.createElement("style");e.id="rgb-style",e.textContent="@keyframes rgbCycle{0%{filter:hue-rotate(0deg);}100%{filter:hue-rotate(360deg);}}.rgb-anim{animation:rgbCycle 10s linear infinite;}",document.head.appendChild(e)}function toggleRgb(e){addRgbCss();const t=document.getElementById("content-library-content-title"),o=document.querySelector('path[d="M2.31,5.8A3.56,3.56,0,0,0,.66,8.6V19.4a3.56,3.56,0,0,0,1.65,2.8L12,27.62a3.75,3.75,0,0,0,3.3,0L25,22.2a3.56,3.56,0,0,0,1.65-2.8V8.6A3.56,3.56,0,0,0,25,5.8L15.31.38a3.75,3.75,0,0,0-3.3,0Z"]'),n=document.getElementById("top-header-container");e?(t?.classList.add("rgb-anim"),o&&(o.style.filter="hue-rotate(0deg)"),n?.classList.add("rgb-anim")):(t?.classList.remove("rgb-anim"),o&&(o.style.filter=""),n?.classList.remove("rgb-anim"))}function buildUI(){const e=document.querySelector('[data-testid="learnable-content-cells"]');if(!e)return setTimeout(buildUI,250);e.innerHTML="";const t=(e,t)=>location.hostname.startsWith("pt")?e:t;[{text:t("Sobrescrever","Overwrite"),path:"exp.Overwrite.enabled"},{text:t("Automatizar","Automate"),path:"exp.Overwrite.automate",small:!0},{text:t("Mostrar Resposta","Show Answer"),path:"exp.showAnswer"},{text:t("Falso Vídeo","Video Spoof"),path:"exp.videoSpoof"},{text:t("Parar Temporizador","Stop Timer"),path:"exp.stopTimer"},{text:t("RGB","RGB"),path:"exp.rgb"}].forEach((({text:e,path:t,small:o})=>{let n=window;for(const e of t.split("."))n=n?.[e];btn(e,t.replace(/\./g,"-"),!0===n,o),"exp.Overwrite.automate"===t&&setTimeout((()=>delayInput(exp.Overwrite.delay)),10)})),e.querySelectorAll("li > a").forEach((e=>{e.addEventListener("click",(()=>{Tools.toggle(e.dataset.path),"exp.rgb"===e.dataset.path&&toggleRgb(exp.rgb)}))})),Tools.update(),exp.rgb&&toggleRgb(!0)}function refreshFooter(){document.querySelector("._1e104hfr")?.remove(),document.querySelector("._1mzlqz11")?.remove();const e=document.querySelector("._1fzkfbec");if(!e)return setTimeout(refreshFooter,250);e.innerHTML='\n    <a class="_1w88iq7y" href="https://github.com/ilytobias/Khan-Destroyer" target="_blank">Github</a>\n    <a class="_1w88iq7y" href="https://discord.gg/platformdestroyer" target="_blank">Discord</a>'}function init(){const e=document.querySelector("._13hsycvc"),t=document.querySelector("._1fzkfbec"),o=document.querySelector('[data-testid="learnable-content-cells"]');if(!e||!t||!o)return setTimeout(init,250);getMenu(),buildUI(),refreshFooter(),addRgbCss(),exp.rgb&&toggleRgb(!0)}setInterval((()=>{exp?.Overwrite?.automate&&sels.forEach((e=>document.querySelector(e)?.click()))}),1e3*(exp?.Overwrite?.delay||1)),Tools.reload(),init();
+const ver = "V3.2.6";
+let isDev = false;
+
+const repoPath = `https://raw.githubusercontent.com/Niximkk/Khanware/refs/heads/${isDev ? "dev/" : "main/"}`;
+
+let device = {
+    mobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Windows Phone|Mobile|Tablet|Kindle|Silk|PlayBook|BB10/i.test(navigator.userAgent),
+    apple: /iPhone|iPad|iPod|Macintosh|Mac OS X/i.test(navigator.userAgent)
+};
+
+/* User */
+let user = {
+    username: "Username",
+    nickname: "Nickname",
+    UID: 0
+}
+
+let loadedPlugins = [];
+
+/* Elements */
+const unloader = document.createElement('unloader');
+const dropdownMenu = document.createElement('dropDownMenu');
+const statsPanel = document.createElement('statsPanel');
+const splashScreen = document.createElement('splashScreen');
+
+/* Globals */
+window.features = {
+    questionSpoof: true,
+    videoSpoof: true,
+    showAnswers: false,
+    autoAnswer: false,
+    customBanner: false,
+    nextRecomendation: false,
+    repeatQuestion: false,
+    minuteFarmer: false,
+    rgbLogo: false
+};
+window.featureConfigs = {
+    autoAnswerDelay: 3,
+    customUsername: "",
+    customPfp: ""
+};
+
+/* Security */
+document.addEventListener('contextmenu', (e) => !window.disableSecurity && e.preventDefault());
+document.addEventListener('keydown', (e) => {
+    if (!window.disableSecurity && (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I','C','J'].includes(e.key)))) {
+        e.preventDefault();
+    }
+});
+
+/* Misc Styles */
+document.head.appendChild(Object.assign(document.createElement("style"), {
+    innerHTML: "@font-face{font-family:'MuseoSans';src:url('https://corsproxy.io/?url=https://r2.e-z.host/4d0a0bea-60f8-44d6-9e74-3032a64a9f32/ynddewua.ttf')format('truetype')}"
+}));
+
+document.querySelector("link[rel~='icon']").href = '';
+
+/* Event Emitter */
+class EventEmitter {
+    constructor(){ this.events={} }
+    on(t,e){ ("string"==typeof t)&&(t=[t]),t.forEach(t=>{
+        this.events[t]||(this.events[t]=[]);
+        this.events[t].push(e);
+    })}
+    off(t,e){ ("string"==typeof t)&&(t=[t]),t.forEach(t=>{
+        this.events[t]&&(this.events[t]=this.events[t].filter(t=>t!==e))
+    })}
+    emit(t,...e){ this.events[t]&&this.events[t].forEach(t=>{ t(...e) }) }
+    once(t,e){
+        ("string"==typeof t)&&(t=[t]);
+        let s=(...i)=>{ e(...i),this.off(t,s) };
+        this.on(t,s)
+    }
+}
+const plppdo = new EventEmitter();
+
+new MutationObserver((m) => { for (let mu of m) if (mu.type === 'childList') plppdo.emit('domChanged'); })
+.observe(document.body, { childList:true, subtree:true });
+
+/* Helpers */
+const delay = ms => new Promise(r => setTimeout(r, ms));
+const playAudio = url => { const a=new Audio(url); a.play(); };
+function sendToast(text, duration=5000, gravity='bottom') {
+    Toastify({ text, duration, gravity, position:"center", stopOnFocus:true, style:{ background:"#000" }}).showToast();
+}
+
+/* Splash Screen */
+async function showSplashScreen(){
+    splashScreen.style.cssText =
+        "position:fixed;top:0;left:0;width:100%;height:100%;background:#000;display:flex;align-items:center;justify-content:center;z-index:9999;color:white;font-size:30px;font-family:MuseoSans,sans-serif;text-align:center;";
+    splashScreen.innerText = "Loading...";
+    document.body.appendChild(splashScreen);
+}
+async function hideSplashScreen(){ splashScreen.remove(); }
+
+/* Script Loader */
+async function loadScript(url,label){
+    return fetch(url).then(r=>r.text()).then(code => { loadedPlugins.push(label); eval(code); });
+}
+async function loadCss(url){
+    return new Promise(res=>{
+        const l=document.createElement("link");
+        l.rel="stylesheet"; l.href=url; l.onload=()=>res();
+        document.head.appendChild(l);
+    });
+}
+
+/* Visual Setup */
+function setupMenu(){
+    loadScript(repoPath+'visuals/mainMenu.js', 'mainMenu');
+    loadScript(repoPath+'visuals/statusPanel.js', 'statusPanel');
+    if(isDev) loadScript(repoPath+'visuals/devTab.js', 'devTab');
+}
+
+/* Core Functions */
+function setupMain(){
+    loadScript(repoPath+'functions/questionSpoof.js', 'questionSpoof');
+    loadScript(repoPath+'functions/videoSpoof.js', 'videoSpoof');
+    loadScript(repoPath+'functions/minuteFarm.js', 'minuteFarm');
+    loadScript(repoPath+'functions/spoofUser.js', 'spoofUser');
+    loadScript(repoPath+'functions/answerRevealer.js', 'answerRevealer');
+    loadScript(repoPath+'functions/rgbLogo.js', 'rgbLogo');
+    loadScript(repoPath+'functions/customBanner.js', 'customBanner');
+    loadScript(repoPath+'functions/autoAnswer.js', 'autoAnswer');
+}
+
+/* Inject Startup */
+showSplashScreen();
+
+loadCss('https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css');
+loadScript('https://cdn.jsdelivr.net/npm/toastify-js').then(async () => {
+    sendToast("Injected successfully!");
+    hideSplashScreen();
+    setupMenu();
+    setupMain();
+});
